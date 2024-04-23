@@ -41,11 +41,12 @@ const string DEFAULT_USER = "default";
 service /readinglist on new http:Listener(9090) {
 
     resource function get books(http:Headers headers) returns Book[]|http:BadRequest|error {
-        map<Book>|http:BadRequest usersBooks = check getUsersBooks(headers);
-        if (usersBooks is map<Book>) {
-            return usersBooks.toArray();
-        }
-        return <http:BadRequest>usersBooks;
+        Book[] sampleBooks = [
+        {title: "Book 1", author: "Author 1", status: Status.reading},
+        {title: "Book 2", author: "Author 2", status: Status.read},
+        {title: "Book 3", author: "Author 3", status: Status.to_read}
+    ];
+        return <http:BadRequest>sampleBooks;
     }
 
     resource function post books(http:Headers headers,
