@@ -42,9 +42,9 @@ service /readinglist on new http:Listener(9090) {
 
     resource function get books(http:Headers headers) returns Book[]|http:BadRequest|error {
         Book[] sampleBooks = [
-        {title: "Book 1", author: "Author 1", status: Status.reading},
-        {title: "Book 2", author: "Author 2", status: Status.read},
-        {title: "Book 3", author: "Author 3", status: Status.to_read}
+        {id:"1",title: "Book 1", author: "Author 1", status: Status.reading},
+        {id:"2",title: "Book 2", author: "Author 2", status: Status.read},
+        {id:"3",title: "Book 3", author: "Author 3", status: Status.to_read}
     ];
         return <http:BadRequest>sampleBooks;
     }
