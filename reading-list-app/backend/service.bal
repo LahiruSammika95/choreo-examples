@@ -46,7 +46,7 @@ service /readinglist on new http:Listener(9090) {
         {id:"2",title: "Book 2", author: "Author 2", status: "read"},
         {id:"3",title: "Book 3", author: "Author 3", status: "to_read"}
     ];
- 	sampleBooks.toArray();
+
         return <http:BadRequest>sampleBooks;
     }
 
