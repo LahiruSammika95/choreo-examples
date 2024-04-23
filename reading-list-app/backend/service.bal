@@ -40,14 +40,14 @@ const string DEFAULT_USER = "default";
 
 service /readinglist on new http:Listener(9090) {
 
-    resource function get books(http:Headers headers) returns Book[]|http:BadRequest|error {
+    resource function get books(http:Headers headers) returns Book[]{
         Book[] sampleBooks = [
         {id:"1",title: "Book 1", author: "Author 1", status: "reading"},
         {id:"2",title: "Book 2", author: "Author 2", status: "read"},
         {id:"3",title: "Book 3", author: "Author 3", status: "to_read"}
     ];
 
-        return <http:BadRequest>sampleBooks;
+        return sampleBooks;
     }
 
     resource function post books(http:Headers headers,
