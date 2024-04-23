@@ -17,12 +17,22 @@
 import ballerina/uuid;
 import ballerina/http;
 import ballerina/jwt;
+import ballerina/sql;
+import ballerinax/mysql;
+import ballerinax/mysql.driver as _;
 
 enum Status {
     reading = "reading",
     read = "read",
     to_read = "to_read"
 }
+
+
+type Result record {|
+    string registrationId;
+    string firstName;
+    string lastName;
+|};
 
 type BookItem record {|
     string title;
@@ -49,6 +59,25 @@ service /readinglist on new http:Listener(9090) {
 
         return sampleBooks;
     }
+
+    resource function get books2(http:Headers headers) returns json|error{
+        mysql:Client mysqlClient = check new (host = "choreo-shared-mysql.mysql.database.azure.com",
+                                            user = "readonly-sampleuser@choreo-shared-mysql.mysql.database.azure.com",
+                                            password = "non_confidential_password",
+                                            database = "customers_db", port = 3306);
+
+        stream<Result, sql:Error?> resultStream = mysqlClient->query(`SELECT registrationId, firstName, lastName FROM Customers 
+                                                WHERE country="usa"`);
+        map<json> resultOutput = {};
+
+        check from Result {registrationId, firstName, lastName} in resultStream
+            do {
+                resultOutput[registrationId] = {firstName, lastName};
+            };
+
+        return resultOutput;
+    }
+
 
     resource function post books(http:Headers headers,
                                  @http:Payload BookItem newBook) returns http:Created|http:BadRequest|error {
